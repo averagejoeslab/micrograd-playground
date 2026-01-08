@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { 
+  BookOpen,
   Circle, 
   GitBranch, 
   Undo2, 
@@ -13,6 +14,15 @@ import {
 import { useStore } from '../store/useStore'
 
 const modules = [
+  {
+    id: 'introduction',
+    title: 'Introduction',
+    subtitle: 'What & Why',
+    description: 'What are neural networks, why do they exist, and the vocabulary you\'ll need.',
+    icon: BookOpen,
+    color: 'white',
+    path: '/learn/introduction',
+  },
   {
     id: 'values',
     title: 'Values',
@@ -42,8 +52,8 @@ const modules = [
   },
   {
     id: 'neuron',
-    title: 'A Neuron',
-    subtitle: 'Weighted sum + activation',
+    title: 'The Neuron',
+    subtitle: 'The building block',
     description: 'Build your first neuron and see how it transforms inputs into outputs.',
     icon: Cpu,
     color: 'cyan',
@@ -70,6 +80,7 @@ const modules = [
 ]
 
 const colorClasses = {
+  white: 'from-gray-400 to-gray-500',
   flow: 'from-flow-500 to-flow-600',
   violet: 'from-accent-violet to-purple-600',
   orange: 'from-grad-500 to-grad-600',
@@ -91,8 +102,8 @@ export function LearnPage() {
       >
         <h1 className="text-4xl font-bold text-white mb-4">Learning Journey</h1>
         <p className="text-xl text-gray-400 max-w-2xl mx-auto">
-          Master neural networks step by step. Each module builds on the previous, 
-          taking you from basic values to training complete networks.
+          Understand neural networks step by step — no coding or math background required. 
+          Each module builds on the previous, giving you genuine intuition.
         </p>
       </motion.div>
 
@@ -115,7 +126,7 @@ export function LearnPage() {
                 )}
               </div>
               {index < modules.length - 1 && (
-                <div className={`w-8 h-0.5 ${
+                <div className={`w-6 h-0.5 ${
                   completedModules.includes(module.id) ? 'bg-accent-emerald' : 'bg-void-700'
                 }`} />
               )}
@@ -128,6 +139,7 @@ export function LearnPage() {
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
         {modules.map((module, index) => {
           const isCompleted = completedModules.includes(module.id)
+          const isFirst = index === 0
           
           return (
             <motion.div
@@ -138,7 +150,9 @@ export function LearnPage() {
             >
               <Link
                 to={module.path}
-                className="glass-card block group hover:border-white/20 transition-all duration-300"
+                className={`glass-card block group hover:border-white/20 transition-all duration-300 ${
+                  isFirst ? 'md:col-span-2 lg:col-span-1' : ''
+                }`}
               >
                 <div className="flex items-start justify-between mb-4">
                   <div className={`
@@ -161,7 +175,7 @@ export function LearnPage() {
                 <p className="text-gray-400 text-sm mb-4">{module.description}</p>
                 
                 <div className="flex items-center gap-2 text-sm text-gray-500 group-hover:text-flow-400 transition-colors">
-                  <span>{isCompleted ? 'Review' : 'Start'} module</span>
+                  <span>{isCompleted ? 'Review' : isFirst ? 'Start here' : 'Start'} module</span>
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </div>
               </Link>

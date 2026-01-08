@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { ArrowLeft, ArrowRight, Check } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Check, HelpCircle } from 'lucide-react'
 import { useStore } from '../../store/useStore'
 
 export function OperationsModule() {
@@ -11,7 +11,7 @@ export function OperationsModule() {
   const [op, setOp] = useState<'+' | '*'>('+')
   const [step, setStep] = useState(0)
 
-  const totalSteps = 3
+  const totalSteps = 4
 
   const result = useMemo(() => {
     return op === '+' ? a + b : a * b
@@ -33,7 +33,7 @@ export function OperationsModule() {
         </Link>
         <div>
           <h1 className="text-3xl font-bold text-white">Operations</h1>
-          <p className="text-gray-400">Numbers combine</p>
+          <p className="text-gray-400">Numbers combine and transform</p>
         </div>
       </div>
 
@@ -49,6 +49,14 @@ export function OperationsModule() {
         ))}
       </div>
 
+      {/* Vocabulary reminder */}
+      <div className="mb-6 p-3 rounded-lg bg-void-800/30 border border-white/5 flex items-center gap-3">
+        <HelpCircle className="w-4 h-4 text-gray-500" />
+        <span className="text-sm text-gray-500">
+          Remember: A <span className="text-flow-400">Value</span> is a container that holds a number
+        </span>
+      </div>
+
       {/* Content */}
       <div className="glass-card mb-8">
         {step === 0 && (
@@ -57,46 +65,31 @@ export function OperationsModule() {
             animate={{ opacity: 1, x: 0 }}
           >
             <h2 className="text-2xl font-semibold text-white mb-4">
-              Values can combine
+              Numbers alone aren't useful
             </h2>
             <p className="text-gray-300 mb-6 leading-relaxed">
-              Numbers on their own aren't very useful. The power comes from <strong className="text-accent-violet">combining</strong> them.
-              In micrograd, Values can be added, multiplied, subtracted, divided, and more.
+              Having a bunch of Values is like having puzzle pieces scattered on a table. 
+              The magic happens when we <strong className="text-white">connect them</strong>.
             </p>
             <p className="text-gray-300 mb-6 leading-relaxed">
-              When we combine Values, we create a <strong className="text-flow-400">computation graph</strong> — 
-              a record of how values flow and transform. This graph is essential for learning.
+              In neural networks, Values combine using simple math operations you already know:
             </p>
-
-            <div className="flex items-center justify-center gap-4 my-8">
-              {/* Visual: a + b = c */}
-              <div className="w-20 h-20 rounded-xl bg-flow-600/20 border-2 border-flow-500/50 
-                           flex flex-col items-center justify-center">
-                <div className="text-xs text-gray-500">a</div>
-                <div className="text-2xl font-mono text-white">3</div>
+            <div className="grid md:grid-cols-2 gap-4 mb-6">
+              <div className="p-4 rounded-xl bg-void-800/50 text-center">
+                <div className="text-3xl mb-2">+</div>
+                <div className="text-white font-medium">Addition</div>
+                <div className="text-sm text-gray-500">Combine values together</div>
               </div>
-              <div className="w-10 h-10 rounded-full bg-void-800 border-2 border-gray-600 
-                           flex items-center justify-center text-xl text-gray-300">
-                +
-              </div>
-              <div className="w-20 h-20 rounded-xl bg-flow-600/20 border-2 border-flow-500/50 
-                           flex flex-col items-center justify-center">
-                <div className="text-xs text-gray-500">b</div>
-                <div className="text-2xl font-mono text-white">4</div>
-              </div>
-              <div className="text-2xl text-gray-500">=</div>
-              <div className="w-20 h-20 rounded-xl bg-grad-600/20 border-2 border-grad-500/50 
-                           flex flex-col items-center justify-center">
-                <div className="text-xs text-gray-500">c</div>
-                <div className="text-2xl font-mono text-white">7</div>
+              <div className="p-4 rounded-xl bg-void-800/50 text-center">
+                <div className="text-3xl mb-2">×</div>
+                <div className="text-white font-medium">Multiplication</div>
+                <div className="text-sm text-gray-500">Scale values up or down</div>
               </div>
             </div>
-
-            <div className="bg-void-800 rounded-xl p-6 font-mono text-sm">
-              <div><span className="text-accent-violet">const</span> a = <span className="text-accent-cyan">new</span> <span className="text-flow-400">Value</span>(<span className="text-grad-400">3</span>)</div>
-              <div><span className="text-accent-violet">const</span> b = <span className="text-accent-cyan">new</span> <span className="text-flow-400">Value</span>(<span className="text-grad-400">4</span>)</div>
-              <div className="mt-2"><span className="text-accent-violet">const</span> c = a.<span className="text-flow-400">add</span>(b) <span className="text-gray-500">// c.data = 7</span></div>
-            </div>
+            <p className="text-gray-300 leading-relaxed">
+              That's it! These two operations — <strong className="text-accent-violet">addition</strong> and{' '}
+              <strong className="text-accent-violet">multiplication</strong> — are almost all you need to build a neural network.
+            </p>
           </motion.div>
         )}
 
@@ -106,10 +99,11 @@ export function OperationsModule() {
             animate={{ opacity: 1, x: 0 }}
           >
             <h2 className="text-2xl font-semibold text-white mb-4">
-              Interactive operations
+              Try combining Values
             </h2>
             <p className="text-gray-300 mb-6 leading-relaxed">
-              Experiment with different values and operations. Watch how the result changes!
+              Adjust the sliders and switch between addition and multiplication. 
+              Watch how two inputs combine to create one output.
             </p>
 
             <div className="flex items-center justify-center gap-4 my-8">
@@ -186,13 +180,12 @@ export function OperationsModule() {
               </motion.div>
             </div>
 
-            <div className="bg-void-800 rounded-xl p-6 font-mono text-sm">
-              <div><span className="text-accent-violet">const</span> a = <span className="text-accent-cyan">new</span> <span className="text-flow-400">Value</span>(<span className="text-grad-400">{a}</span>)</div>
-              <div><span className="text-accent-violet">const</span> b = <span className="text-accent-cyan">new</span> <span className="text-flow-400">Value</span>(<span className="text-grad-400">{b}</span>)</div>
-              <div className="mt-2">
-                <span className="text-accent-violet">const</span> result = a.<span className="text-flow-400">{op === '+' ? 'add' : 'mul'}</span>(b) 
-                <span className="text-gray-500"> // result.data = {result}</span>
-              </div>
+            <div className="p-4 rounded-xl bg-accent-violet/10 border border-accent-violet/30">
+              <p className="text-sm text-gray-300">
+                💡 <strong>Notice:</strong> Two <span className="text-flow-400">inputs</span> go in, 
+                one <span className="text-grad-400">output</span> comes out. This is how information 
+                transforms as it flows through a neural network — values combine into new values.
+              </p>
             </div>
           </motion.div>
         )}
@@ -203,11 +196,15 @@ export function OperationsModule() {
             animate={{ opacity: 1, x: 0 }}
           >
             <h2 className="text-2xl font-semibold text-white mb-4">
-              Building computation graphs
+              Chaining operations together
             </h2>
             <p className="text-gray-300 mb-6 leading-relaxed">
-              When you chain operations together, you build a <strong className="text-flow-400">computation graph</strong>.
-              Each value remembers which values and operations created it.
+              The output of one operation can become the input to another. 
+              When we chain many operations together, we create what's called a{' '}
+              <strong className="text-accent-violet">computation graph</strong>.
+            </p>
+            <p className="text-gray-300 mb-6 leading-relaxed">
+              Think of it like a recipe: each step uses the result from the previous step.
             </p>
 
             <div className="flex items-center justify-center my-8">
@@ -257,27 +254,63 @@ export function OperationsModule() {
                   <text x="360" y="70" textAnchor="middle" className="fill-gray-400 text-xs">out</text>
                   <text x="360" y="83" textAnchor="middle" className="fill-white text-sm font-mono">7</text>
                 </g>
+
+                {/* Labels */}
+                <text x="160" y="110" textAnchor="middle" className="fill-gray-500 text-xs">2 × 3 = 6</text>
+                <text x="300" y="110" textAnchor="middle" className="fill-gray-500 text-xs">6 + 1 = 7</text>
               </svg>
             </div>
 
-            <div className="bg-void-800 rounded-xl p-6 font-mono text-sm">
-              <div><span className="text-gray-500">// out = x * y + 1</span></div>
-              <div><span className="text-accent-violet">const</span> x = <span className="text-accent-cyan">new</span> <span className="text-flow-400">Value</span>(<span className="text-grad-400">2</span>)</div>
-              <div><span className="text-accent-violet">const</span> y = <span className="text-accent-cyan">new</span> <span className="text-flow-400">Value</span>(<span className="text-grad-400">3</span>)</div>
-              <div><span className="text-accent-violet">const</span> out = x.<span className="text-flow-400">mul</span>(y).<span className="text-flow-400">add</span>(<span className="text-accent-cyan">new</span> <span className="text-flow-400">Value</span>(<span className="text-grad-400">1</span>))</div>
-              <div className="mt-2 text-gray-500">// out.data = 7</div>
+            <div className="bg-void-800 rounded-xl p-4 text-sm">
+              <div className="text-gray-400 mb-2">Reading the graph:</div>
+              <ol className="list-decimal list-inside space-y-1 text-gray-300">
+                <li><span className="text-flow-400">x (2)</span> and <span className="text-flow-400">y (3)</span> multiply to get <span className="text-accent-violet">6</span></li>
+                <li><span className="text-accent-violet">6</span> and <span className="text-flow-400">1</span> add to get <span className="text-grad-400">7</span></li>
+              </ol>
             </div>
+          </motion.div>
+        )}
 
-            <div className="mt-6 bg-accent-emerald/10 border border-accent-emerald/30 rounded-xl p-4">
+        {step === 3 && (
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+          >
+            <h2 className="text-2xl font-semibold text-white mb-4">
+              Why this matters
+            </h2>
+            <p className="text-gray-300 mb-6 leading-relaxed">
+              A neural network is just a big computation graph — values flowing through 
+              operations to produce outputs.
+            </p>
+            <p className="text-gray-300 mb-6 leading-relaxed">
+              But here's the crucial part: the network <strong className="text-white">remembers the path</strong>. 
+              It keeps track of which values contributed to the final result, and how.
+            </p>
+            <p className="text-gray-300 mb-6 leading-relaxed">
+              This "memory" is what allows the network to learn. When the output is wrong, 
+              we can trace back through the graph and figure out which values need to change.
+            </p>
+
+            <div className="bg-accent-emerald/10 border border-accent-emerald/30 rounded-xl p-4">
               <div className="flex items-start gap-3">
                 <Check className="w-5 h-5 text-accent-emerald mt-0.5" />
                 <div>
                   <div className="font-medium text-white">Key Takeaway</div>
                   <p className="text-sm text-gray-400 mt-1">
-                    Operations create new Values and build a graph. This graph records 
-                    the <em>history</em> of computations — which is essential for computing gradients.
+                    Operations combine Values into new Values. When we chain operations together, 
+                    we build a <span className="text-accent-violet">computation graph</span>. 
+                    The network remembers this graph — and that's the key to learning.
                   </p>
                 </div>
+              </div>
+            </div>
+
+            <div className="mt-6 p-4 rounded-xl bg-void-800/50 border border-white/5">
+              <div className="text-sm text-gray-500 mb-2">New vocabulary:</div>
+              <div className="text-accent-violet font-medium">Computation Graph</div>
+              <div className="text-sm text-gray-400">
+                The connected chain of values and operations that transforms inputs into outputs
               </div>
             </div>
           </motion.div>
@@ -317,4 +350,3 @@ export function OperationsModule() {
     </div>
   )
 }
-

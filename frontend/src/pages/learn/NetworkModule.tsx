@@ -1,14 +1,14 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { ArrowLeft, ArrowRight, Check } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Check, HelpCircle } from 'lucide-react'
 import { useStore } from '../../store/useStore'
 
 export function NetworkModule() {
   const { markModuleComplete } = useStore()
   const [step, setStep] = useState(0)
 
-  const totalSteps = 3
+  const totalSteps = 4
 
   const handleComplete = () => {
     markModuleComplete('network')
@@ -42,6 +42,16 @@ export function NetworkModule() {
         ))}
       </div>
 
+      {/* Vocabulary reminder */}
+      <div className="mb-6 p-3 rounded-lg bg-void-800/30 border border-white/5 flex items-center gap-3">
+        <HelpCircle className="w-4 h-4 text-gray-500" />
+        <span className="text-sm text-gray-500">
+          Remember: A <span className="text-accent-cyan">neuron</span> takes inputs, 
+          multiplies by <span className="text-accent-violet">weights</span>, adds <span className="text-gray-400">bias</span>, 
+          then applies activation
+        </span>
+      </div>
+
       {/* Content */}
       <div className="glass-card mb-8">
         {step === 0 && (
@@ -50,16 +60,61 @@ export function NetworkModule() {
             animate={{ opacity: 1, x: 0 }}
           >
             <h2 className="text-2xl font-semibold text-white mb-4">
+              One neuron isn't enough
+            </h2>
+            <p className="text-gray-300 mb-6 leading-relaxed">
+              A single neuron can only learn simple patterns — essentially drawing one line 
+              to separate data. To recognize a face, understand language, or play a game, 
+              we need <strong className="text-white">many neurons working together</strong>.
+            </p>
+            <p className="text-gray-300 mb-6 leading-relaxed">
+              The solution? Group neurons into <strong className="text-accent-emerald">layers</strong>.
+            </p>
+
+            <div className="bg-void-800 rounded-xl p-6 mb-6">
+              <div className="flex items-center justify-between mb-4">
+                <div className="text-gray-500">One neuron:</div>
+                <div className="text-gray-500">One layer (3 neurons):</div>
+              </div>
+              <div className="flex items-center justify-between">
+                <div className="w-16 h-16 rounded-full bg-accent-violet/20 border-2 border-accent-violet flex items-center justify-center">
+                  <span className="text-accent-violet font-mono">n</span>
+                </div>
+                <div className="text-gray-500">→</div>
+                <div className="flex gap-2">
+                  {[1, 2, 3].map(i => (
+                    <div key={i} className="w-12 h-12 rounded-full bg-accent-violet/20 border-2 border-accent-violet flex items-center justify-center">
+                      <span className="text-accent-violet font-mono text-sm">n{i}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <p className="text-gray-300 leading-relaxed">
+              Each neuron in a layer gets the <strong className="text-white">same inputs</strong> but 
+              has <strong className="text-white">different weights</strong>. 
+              This means each neuron learns to detect different things!
+            </p>
+          </motion.div>
+        )}
+
+        {step === 1 && (
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+          >
+            <h2 className="text-2xl font-semibold text-white mb-4">
               Layers: Groups of neurons
             </h2>
             <p className="text-gray-300 mb-6 leading-relaxed">
-              A single neuron can only learn simple patterns. 
-              To learn complex things, we group neurons into <strong className="text-accent-emerald">layers</strong>.
+              A <strong className="text-accent-emerald">layer</strong> is simply a group of neurons that:
             </p>
-            <p className="text-gray-300 mb-6 leading-relaxed">
-              Each neuron in a layer receives the <em>same inputs</em> but has <em>different weights</em>, 
-              so each learns to detect different features.
-            </p>
+            <ol className="list-decimal list-inside space-y-2 text-gray-300 mb-6">
+              <li>All receive the same inputs</li>
+              <li>Each have their own weights and bias</li>
+              <li>All output their values to the next layer</li>
+            </ol>
 
             <div className="flex items-center justify-center my-8">
               <svg viewBox="0 0 300 200" className="w-full max-w-md">
@@ -89,7 +144,7 @@ export function NetworkModule() {
 
                 {/* Layer */}
                 <g>
-                  <text x="160" y="15" textAnchor="middle" className="fill-gray-500 text-xs">layer</text>
+                  <text x="160" y="15" textAnchor="middle" className="fill-accent-emerald text-xs font-medium">Layer</text>
                   {[0, 1, 2].map(i => (
                     <g key={i}>
                       <motion.circle 
@@ -117,37 +172,40 @@ export function NetworkModule() {
                   strokeWidth="1" 
                   strokeDasharray="4,4"
                 />
-                <text x="235" y="105" textAnchor="middle" className="fill-gray-400 text-xs">
+                <text x="240" y="105" textAnchor="middle" className="fill-gray-400 text-xs">
                   3 neurons
                 </text>
               </svg>
             </div>
 
-            <div className="bg-void-800 rounded-xl p-6 font-mono text-sm">
-              <div className="text-gray-500">// Create a layer with 3 neurons, each taking 2 inputs</div>
-              <div className="mt-2">
-                <span className="text-accent-violet">const</span> layer = <span className="text-accent-cyan">new</span> <span className="text-flow-400">Layer</span>(<span className="text-grad-400">2</span>, <span className="text-grad-400">3</span>)
+            <div className="bg-void-800 rounded-xl p-4 text-sm">
+              <div className="text-gray-400">
+                <strong className="text-white">How many parameters?</strong> If a layer has 3 neurons, 
+                each receiving 2 inputs:
               </div>
-              <div className="mt-2 text-gray-500">// layer has 3 neurons × (2 weights + 1 bias) = 9 parameters</div>
+              <div className="mt-2 text-gray-300">
+                3 neurons × (2 weights + 1 bias) = <span className="text-accent-emerald font-mono">9 parameters</span>
+              </div>
             </div>
           </motion.div>
         )}
 
-        {step === 1 && (
+        {step === 2 && (
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
           >
             <h2 className="text-2xl font-semibold text-white mb-4">
-              MLP: Multi-Layer Perceptron
+              Stacking layers: The MLP
             </h2>
             <p className="text-gray-300 mb-6 leading-relaxed">
-              By stacking multiple layers, we create a <strong className="text-accent-emerald">Multi-Layer Perceptron (MLP)</strong>.
-              Each layer's outputs become the next layer's inputs.
+              When we stack multiple layers together, we create a{' '}
+              <strong className="text-accent-emerald">Multi-Layer Perceptron (MLP)</strong>.
             </p>
             <p className="text-gray-300 mb-6 leading-relaxed">
-              The more layers, the more complex patterns the network can learn — 
-              that's why they're called "deep" neural networks!
+              The more layers, the more complex patterns the network can learn. 
+              Networks with many layers are called <strong className="text-white">"deep"</strong> neural networks — 
+              that's where "deep learning" comes from!
             </p>
 
             <div className="flex items-center justify-center my-8">
@@ -174,7 +232,7 @@ export function NetworkModule() {
 
                 {/* Input layer */}
                 <g>
-                  <text x="50" y="20" textAnchor="middle" className="fill-gray-500 text-xs">input</text>
+                  <text x="50" y="20" textAnchor="middle" className="fill-flow-400 text-xs">input</text>
                   {[0, 1].map(i => (
                     <circle key={i} cx="50" cy={70 + i * 60} r="16" className="fill-flow-600/30 stroke-flow-500" strokeWidth="2" />
                   ))}
@@ -182,7 +240,7 @@ export function NetworkModule() {
 
                 {/* Hidden layer 1 */}
                 <g>
-                  <text x="130" y="15" textAnchor="middle" className="fill-gray-500 text-xs">hidden</text>
+                  <text x="130" y="15" textAnchor="middle" className="fill-accent-violet text-xs">hidden 1</text>
                   {[0, 1, 2, 3].map(i => (
                     <motion.circle 
                       key={i} 
@@ -200,7 +258,7 @@ export function NetworkModule() {
 
                 {/* Hidden layer 2 */}
                 <g>
-                  <text x="220" y="15" textAnchor="middle" className="fill-gray-500 text-xs">hidden</text>
+                  <text x="220" y="15" textAnchor="middle" className="fill-accent-cyan text-xs">hidden 2</text>
                   {[0, 1, 2, 3].map(i => (
                     <motion.circle 
                       key={i} 
@@ -218,7 +276,7 @@ export function NetworkModule() {
 
                 {/* Output layer */}
                 <g>
-                  <text x="300" y="70" textAnchor="middle" className="fill-gray-500 text-xs">output</text>
+                  <text x="300" y="70" textAnchor="middle" className="fill-grad-400 text-xs">output</text>
                   <motion.circle 
                     cx="300" 
                     cy="100" 
@@ -238,101 +296,107 @@ export function NetworkModule() {
               </svg>
             </div>
 
-            <div className="bg-void-800 rounded-xl p-6 font-mono text-sm">
-              <div className="text-gray-500">// Create an MLP: 2 inputs → 4 hidden → 4 hidden → 1 output</div>
-              <div className="mt-2">
-                <span className="text-accent-violet">const</span> model = <span className="text-accent-cyan">new</span> <span className="text-flow-400">MLP</span>(<span className="text-grad-400">2</span>, [<span className="text-grad-400">4</span>, <span className="text-grad-400">4</span>, <span className="text-grad-400">1</span>])
+            <div className="bg-void-800 rounded-xl p-4 text-sm">
+              <div className="text-gray-400 mb-2">
+                <strong className="text-white">MLP(2, [4, 4, 1])</strong> means:
               </div>
-              <div className="mt-2">
-                <span className="text-gray-500">// Total parameters: </span>
-                <span className="text-white">41</span>
-                <span className="text-gray-500"> (weights + biases)</span>
-              </div>
+              <ul className="space-y-1 text-gray-300">
+                <li>• <span className="text-flow-400">2</span> inputs</li>
+                <li>• <span className="text-accent-violet">4</span> neurons in first hidden layer</li>
+                <li>• <span className="text-accent-cyan">4</span> neurons in second hidden layer</li>
+                <li>• <span className="text-grad-400">1</span> output neuron</li>
+              </ul>
             </div>
           </motion.div>
         )}
 
-        {step === 2 && (
+        {step === 3 && (
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
           >
             <h2 className="text-2xl font-semibold text-white mb-4">
-              Forward pass: Data flows through
+              The forward pass
             </h2>
             <p className="text-gray-300 mb-6 leading-relaxed">
               When you give inputs to a network, data flows forward through each layer — 
               this is called the <strong className="text-flow-400">forward pass</strong>.
             </p>
             <p className="text-gray-300 mb-6 leading-relaxed">
-              Each layer transforms the data, extracting increasingly abstract features 
-              until the final layer produces the prediction.
+              Each layer transforms the data, building on what the previous layer found:
             </p>
 
-            <div className="flex items-center justify-center gap-4 my-8">
-              {[
-                { label: 'Input', color: 'flow', examples: ['x, y coords', 'pixels', 'words'] },
-                { label: 'Hidden', color: 'violet', examples: ['edges', 'shapes', 'concepts'] },
-                { label: 'Hidden', color: 'cyan', examples: ['patterns', 'objects', 'meanings'] },
-                { label: 'Output', color: 'grad', examples: ['class', 'score', 'prediction'] },
-              ].map((layer, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.15 }}
-                  className="flex flex-col items-center"
-                >
-                  <div className={`w-20 h-24 rounded-xl bg-${
-                    layer.color === 'flow' ? 'flow-600' :
-                    layer.color === 'violet' ? 'accent-violet' :
-                    layer.color === 'cyan' ? 'accent-cyan' : 'grad-600'
-                  }/20 border-2 border-${
-                    layer.color === 'flow' ? 'flow-500' :
-                    layer.color === 'violet' ? 'accent-violet' :
-                    layer.color === 'cyan' ? 'accent-cyan' : 'grad-500'
-                  }/50 flex items-center justify-center mb-2`}
-                  style={{
-                    background: layer.color === 'flow' ? 'rgba(59, 130, 246, 0.2)' :
-                              layer.color === 'violet' ? 'rgba(167, 139, 250, 0.2)' :
-                              layer.color === 'cyan' ? 'rgba(34, 211, 238, 0.2)' : 'rgba(249, 115, 22, 0.2)',
-                    borderColor: layer.color === 'flow' ? 'rgba(59, 130, 246, 0.5)' :
-                                layer.color === 'violet' ? 'rgba(167, 139, 250, 0.5)' :
-                                layer.color === 'cyan' ? 'rgba(34, 211, 238, 0.5)' : 'rgba(249, 115, 22, 0.5)'
-                  }}>
-                    <span className="text-white font-medium text-sm">{layer.label}</span>
-                  </div>
-                  <div className="text-xs text-gray-500 text-center">
-                    {layer.examples[0]}
-                  </div>
-                  {i < 3 && (
-                    <div className="absolute mt-12 ml-20 text-gray-600">→</div>
-                  )}
-                </motion.div>
-              ))}
+            <div className="space-y-3 mb-6">
+              <div className="flex items-start gap-3 p-3 rounded-lg bg-void-800/50">
+                <div className="w-8 h-8 rounded-full bg-flow-600/30 flex items-center justify-center text-flow-400 text-sm">1</div>
+                <div>
+                  <div className="text-white font-medium">Input layer</div>
+                  <div className="text-sm text-gray-500">Raw data: pixels, numbers, words</div>
+                </div>
+              </div>
+              <div className="flex items-start gap-3 p-3 rounded-lg bg-void-800/50">
+                <div className="w-8 h-8 rounded-full bg-accent-violet/30 flex items-center justify-center text-accent-violet text-sm">2</div>
+                <div>
+                  <div className="text-white font-medium">Early hidden layers</div>
+                  <div className="text-sm text-gray-500">Simple features: edges, basic patterns</div>
+                </div>
+              </div>
+              <div className="flex items-start gap-3 p-3 rounded-lg bg-void-800/50">
+                <div className="w-8 h-8 rounded-full bg-accent-cyan/30 flex items-center justify-center text-accent-cyan text-sm">3</div>
+                <div>
+                  <div className="text-white font-medium">Later hidden layers</div>
+                  <div className="text-sm text-gray-500">Complex features: shapes, concepts</div>
+                </div>
+              </div>
+              <div className="flex items-start gap-3 p-3 rounded-lg bg-void-800/50">
+                <div className="w-8 h-8 rounded-full bg-grad-600/30 flex items-center justify-center text-grad-400 text-sm">4</div>
+                <div>
+                  <div className="text-white font-medium">Output layer</div>
+                  <div className="text-sm text-gray-500">Final prediction: "cat" or "dog"</div>
+                </div>
+              </div>
             </div>
 
-            <div className="bg-void-800 rounded-xl p-6 font-mono text-sm">
-              <div className="text-gray-500">// Forward pass</div>
-              <div className="mt-2">
-                <span className="text-accent-violet">const</span> inputs = [<span className="text-accent-cyan">new</span> <span className="text-flow-400">Value</span>(<span className="text-grad-400">1.0</span>), <span className="text-accent-cyan">new</span> <span className="text-flow-400">Value</span>(<span className="text-grad-400">2.0</span>)]
-              </div>
-              <div>
-                <span className="text-accent-violet">const</span> output = model.<span className="text-flow-400">call</span>(inputs)
-              </div>
-              <div className="mt-2 text-gray-500">// output is a Value containing the prediction</div>
-            </div>
-
-            <div className="mt-6 bg-accent-emerald/10 border border-accent-emerald/30 rounded-xl p-4">
+            <div className="bg-accent-emerald/10 border border-accent-emerald/30 rounded-xl p-4">
               <div className="flex items-start gap-3">
                 <Check className="w-5 h-5 text-accent-emerald mt-0.5" />
                 <div>
                   <div className="font-medium text-white">Key Takeaway</div>
                   <p className="text-sm text-gray-400 mt-1">
-                    Neural networks are just layers of neurons stacked together. 
-                    Data flows forward (forward pass), predictions flow out, 
-                    and gradients flow backward (backward pass) for learning.
+                    Neural networks are <span className="text-accent-emerald">layers</span> of neurons stacked together. 
+                    Data flows forward (<span className="text-flow-400">forward pass</span>) to make predictions. 
+                    <span className="text-grad-400"> Gradients</span> flow backward (<span className="text-grad-400">backward pass</span>) to enable learning.
                   </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-6 p-4 rounded-xl bg-void-800/50 border border-white/5">
+              <div className="text-sm text-gray-500 mb-2">New vocabulary:</div>
+              <div className="grid md:grid-cols-2 gap-4">
+                <div>
+                  <div className="text-accent-emerald font-medium">Layer</div>
+                  <div className="text-xs text-gray-400">
+                    A group of neurons that process the same inputs
+                  </div>
+                </div>
+                <div>
+                  <div className="text-accent-emerald font-medium">MLP (Multi-Layer Perceptron)</div>
+                  <div className="text-xs text-gray-400">
+                    Multiple layers stacked together
+                  </div>
+                </div>
+                <div>
+                  <div className="text-flow-400 font-medium">Forward Pass</div>
+                  <div className="text-xs text-gray-400">
+                    Data flowing from inputs to outputs
+                  </div>
+                </div>
+                <div>
+                  <div className="text-gray-400 font-medium">Hidden Layer</div>
+                  <div className="text-xs text-gray-400">
+                    Layers between input and output
+                  </div>
                 </div>
               </div>
             </div>
@@ -373,4 +437,3 @@ export function NetworkModule() {
     </div>
   )
 }
-

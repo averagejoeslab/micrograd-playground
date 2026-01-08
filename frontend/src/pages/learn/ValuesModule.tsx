@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { ArrowLeft, ArrowRight, Check } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Check, HelpCircle } from 'lucide-react'
 import { useStore } from '../../store/useStore'
 
 // Always show hints for maximum helpfulness
@@ -11,7 +11,7 @@ export function ValuesModule() {
   const [value, setValue] = useState(5)
   const [step, setStep] = useState(0)
 
-  const totalSteps = 3
+  const totalSteps = 4
 
   const handleComplete = () => {
     markModuleComplete('values')
@@ -29,7 +29,7 @@ export function ValuesModule() {
         </Link>
         <div>
           <h1 className="text-3xl font-bold text-white">Values</h1>
-          <p className="text-gray-400">Everything is a number</p>
+          <p className="text-gray-400">Everything becomes numbers</p>
         </div>
       </div>
 
@@ -45,6 +45,15 @@ export function ValuesModule() {
         ))}
       </div>
 
+      {/* Vocabulary reminder */}
+      <div className="mb-6 p-3 rounded-lg bg-void-800/30 border border-white/5 flex items-center gap-3">
+        <HelpCircle className="w-4 h-4 text-gray-500" />
+        <span className="text-sm text-gray-500">
+          Remember: <span className="text-flow-400">Input</span> = information going in, 
+          <span className="text-grad-400"> Output</span> = the network's answer
+        </span>
+      </div>
+
       {/* Content */}
       <div className="glass-card mb-8">
         {step === 0 && (
@@ -53,30 +62,33 @@ export function ValuesModule() {
             animate={{ opacity: 1, x: 0 }}
           >
             <h2 className="text-2xl font-semibold text-white mb-4">
-              Neural networks work with numbers
+              Computers only understand numbers
             </h2>
             <p className="text-gray-300 mb-6 leading-relaxed">
-              At the heart of every neural network is a simple idea: <strong className="text-flow-400">everything is a number</strong>.
-              Images become grids of pixel values. Words become sequences of numbers. 
-              Sounds become waveforms of amplitudes.
+              Here's something that might surprise you: to a computer, <em>everything</em> is a number.
             </p>
-            <p className="text-gray-300 mb-6 leading-relaxed">
-              In micrograd, we represent these numbers using something called a <code className="text-flow-400 bg-void-800 px-2 py-1 rounded">Value</code>.
-              A Value is just a container for a number — but it has a superpower we'll discover later.
-            </p>
-            <div className="bg-void-800 rounded-xl p-6 font-mono text-sm">
-              <div className="text-gray-500 mb-2">// Creating a Value in micrograd</div>
-              <div>
-                <span className="text-accent-violet">const</span>{' '}
-                <span className="text-white">x</span>{' '}
-                <span className="text-gray-500">=</span>{' '}
-                <span className="text-accent-cyan">new</span>{' '}
-                <span className="text-flow-400">Value</span>
-                <span className="text-gray-500">(</span>
-                <span className="text-grad-400">5.0</span>
-                <span className="text-gray-500">)</span>
+            <div className="grid md:grid-cols-2 gap-4 mb-6">
+              <div className="p-4 rounded-xl bg-void-800/50">
+                <div className="text-sm text-gray-500 mb-1">A photo</div>
+                <div className="text-white">→ Millions of numbers (pixel colors)</div>
+              </div>
+              <div className="p-4 rounded-xl bg-void-800/50">
+                <div className="text-sm text-gray-500 mb-1">A word</div>
+                <div className="text-white">→ A list of numbers (letter codes)</div>
+              </div>
+              <div className="p-4 rounded-xl bg-void-800/50">
+                <div className="text-sm text-gray-500 mb-1">A sound</div>
+                <div className="text-white">→ Thousands of numbers (wave heights)</div>
+              </div>
+              <div className="p-4 rounded-xl bg-void-800/50">
+                <div className="text-sm text-gray-500 mb-1">Your age</div>
+                <div className="text-white">→ Already a number!</div>
               </div>
             </div>
+            <p className="text-gray-300 leading-relaxed">
+              Neural networks work with these numbers. The <span className="text-flow-400 font-medium">inputs</span> are numbers, 
+              the <span className="text-grad-400 font-medium">outputs</span> are numbers, and everything in between is numbers.
+            </p>
           </motion.div>
         )}
 
@@ -86,11 +98,41 @@ export function ValuesModule() {
             animate={{ opacity: 1, x: 0 }}
           >
             <h2 className="text-2xl font-semibold text-white mb-4">
+              Introducing the "Value"
+            </h2>
+            <p className="text-gray-300 mb-6 leading-relaxed">
+              In our neural network, we store numbers in containers called <strong className="text-flow-400">Values</strong>.
+            </p>
+            <p className="text-gray-300 mb-6 leading-relaxed">
+              A Value is simply a box that holds a number. That's it! Nothing fancy yet.
+            </p>
+            <div className="flex justify-center mb-6">
+              <div className="w-32 h-32 rounded-2xl bg-gradient-to-br from-flow-600/20 to-flow-500/10 
+                           border-2 border-flow-500/50 flex flex-col items-center justify-center">
+                <div className="text-xs text-gray-500 mb-1">Value</div>
+                <div className="text-4xl font-mono text-white">5</div>
+              </div>
+            </div>
+            <div className="bg-void-800 rounded-xl p-4 text-sm text-gray-400">
+              <p>
+                <strong className="text-white">Why "Value" and not just "number"?</strong> Because later, 
+                we'll add something special to it. But for now, think of it as a labeled box holding a number.
+              </p>
+            </div>
+          </motion.div>
+        )}
+
+        {step === 2 && (
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+          >
+            <h2 className="text-2xl font-semibold text-white mb-4">
               Try it yourself
             </h2>
             <p className="text-gray-300 mb-6 leading-relaxed">
-              Use the slider below to create a Value with different numbers. 
-              Notice how the Value object stores and displays the number you choose.
+              Use the slider below to change the number inside the Value. 
+              Values can be positive, negative, or zero — just like regular numbers.
             </p>
 
             <div className="flex items-center gap-8 mb-8">
@@ -125,61 +167,59 @@ export function ValuesModule() {
               </motion.div>
             </div>
 
-            <div className="bg-void-800 rounded-xl p-6 font-mono text-sm">
-              <div>
-                <span className="text-accent-violet">const</span>{' '}
-                <span className="text-white">x</span>{' '}
-                <span className="text-gray-500">=</span>{' '}
-                <span className="text-accent-cyan">new</span>{' '}
-                <span className="text-flow-400">Value</span>
-                <span className="text-gray-500">(</span>
-                <span className="text-grad-400">{value}</span>
-                <span className="text-gray-500">)</span>
-              </div>
-              <div className="mt-2">
-                <span className="text-gray-500">// x.data = </span>
-                <span className="text-white">{value}</span>
-              </div>
-            </div>
+            {/* Helpful hint */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="p-4 rounded-xl bg-flow-600/10 border border-flow-500/30"
+            >
+              <p className="text-sm text-flow-300">
+                💡 <strong>Notice:</strong> When you move the slider, the Value updates instantly. 
+                In a neural network, thousands of these Values change as information flows through.
+              </p>
+            </motion.div>
           </motion.div>
         )}
 
-        {step === 2 && (
+        {step === 3 && (
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
           >
             <h2 className="text-2xl font-semibold text-white mb-4">
-              Values have a secret: gradients
+              Values have a secret superpower
             </h2>
             <p className="text-gray-300 mb-6 leading-relaxed">
-              Every Value in micrograd doesn't just store a number — it also tracks something called a <strong className="text-grad-400">gradient</strong>.
-            </p>
-            <p className="text-gray-300 mb-6 leading-relaxed">
-              The gradient tells us: <em>"If I change this value a tiny bit, how much does the final result change?"</em>
-              This is the key insight that makes neural networks learn. We'll explore gradients more in the next module.
+              Here's what makes Values special in a neural network. 
+              Each Value stores <strong className="text-white">two things</strong>:
             </p>
 
             <div className="flex items-center gap-8 mb-8">
               <motion.div
-                className="w-48 h-40 rounded-2xl bg-gradient-to-br from-flow-600/20 to-flow-500/10 
+                className="flex-1 h-40 rounded-2xl bg-gradient-to-br from-flow-600/20 to-flow-500/10 
                          border-2 border-flow-500/50 flex flex-col items-center justify-center p-4"
               >
                 <div className="text-xs text-gray-500 mb-2">Value</div>
-                <div className="text-3xl font-mono text-white mb-3">{value}</div>
-                <div className="w-full border-t border-white/10 pt-3">
+                <div className="text-3xl font-mono text-white mb-4">{value}</div>
+                <div className="w-full border-t border-white/10 pt-3 text-center">
                   <div className="text-xs text-gray-500">gradient</div>
-                  <div className="text-lg font-mono text-grad-400">0.000</div>
+                  <div className="text-lg font-mono text-grad-400">???</div>
                 </div>
               </motion.div>
 
-              <div className="flex-1 text-sm text-gray-400">
-                <p className="mb-2">
-                  <span className="text-flow-400 font-mono">data</span>: The actual number ({value})
-                </p>
-                <p>
-                  <span className="text-grad-400 font-mono">grad</span>: How sensitive the output is to this value (starts at 0)
-                </p>
+              <div className="flex-1 space-y-4">
+                <div className="p-3 rounded-lg bg-void-800/50">
+                  <div className="text-flow-400 font-medium mb-1">The number itself</div>
+                  <div className="text-sm text-gray-400">
+                    The actual data ({value} in this case)
+                  </div>
+                </div>
+                <div className="p-3 rounded-lg bg-void-800/50">
+                  <div className="text-grad-400 font-medium mb-1">The gradient</div>
+                  <div className="text-sm text-gray-400">
+                    A special number we'll learn about soon — it's the key to learning!
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -189,8 +229,9 @@ export function ValuesModule() {
                 <div>
                   <div className="font-medium text-white">Key Takeaway</div>
                   <p className="text-sm text-gray-400 mt-1">
-                    A Value stores both a number (<code className="text-flow-400">.data</code>) and its gradient (<code className="text-grad-400">.grad</code>).
-                    The gradient is what enables neural networks to learn.
+                    A <span className="text-flow-400">Value</span> holds a number. Every piece of information 
+                    in a neural network — inputs, outputs, everything in between — is stored as Values. 
+                    The <span className="text-grad-400">gradient</span> part will make sense soon!
                   </p>
                 </div>
               </div>
@@ -229,21 +270,6 @@ export function ValuesModule() {
           </Link>
         )}
       </div>
-
-      {/* Helpful hint */}
-      {step === 1 && (
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mt-6 p-4 rounded-xl bg-flow-600/10 border border-flow-500/30"
-        >
-          <p className="text-sm text-flow-300">
-            💡 <strong>Tip:</strong> Try dragging the slider to see how the Value changes. 
-            Values can be positive, negative, or zero!
-          </p>
-        </motion.div>
-      )}
     </div>
   )
 }
-

@@ -3,6 +3,7 @@ import { Layout } from './components/Layout'
 import { HomePage } from './pages/HomePage'
 import { PlaygroundPage } from './pages/PlaygroundPage'
 import { LearnPage } from './pages/LearnPage'
+import { IntroductionModule } from './pages/learn/IntroductionModule'
 import { ValuesModule } from './pages/learn/ValuesModule'
 import { OperationsModule } from './pages/learn/OperationsModule'
 import { GradientsModule } from './pages/learn/GradientsModule'
@@ -17,6 +18,7 @@ export default function App() {
         <Route index element={<HomePage />} />
         <Route path="playground" element={<PlaygroundPage />} />
         <Route path="learn" element={<LearnPage />} />
+        <Route path="learn/introduction" element={<IntroductionModule />} />
         <Route path="learn/values" element={<ValuesModule />} />
         <Route path="learn/operations" element={<OperationsModule />} />
         <Route path="learn/gradients" element={<GradientsModule />} />
@@ -27,4 +29,3 @@ export default function App() {
     </Routes>
   )
 }
-
